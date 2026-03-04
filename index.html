@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Motospec Track</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <style>
+    body { background:#111; color:white; text-align:center; font-family:Arial; }
+    input, button { padding:10px; margin:10px; width:250px; border:none; border-radius:6px; }
+    button { background:#00ff99; font-weight:bold; }
+    #reader { width:300px; margin:auto; }
+    img { width:200px; margin-top:10px; }
+  </style>
+</head>
+<body>
+
+<h2>Motospec Product Tracking</h2>
+
+<input type="text" id="barcodeInput" placeholder="Enter Barcode">
+<br>
+<button onclick="trackProduct()">Search</button>
+<button onclick="startScanner()">Scan Barcode</button>
+
+<div id="reader"></div>
+<div id="result"></div>
+
+<script>
+
+const webhookURL = "https://hook.eu1.make.com/ec0zsxxpcfqjxb2wv23y3b674bso6red";
+
+function trackProduct() {
+  const barcode = document.getElementById("barcodeInput").value;
+
+  fetch(webhookURL + "?barcode=" + barcode)
+    .then(res => res.json())
+    .then(data => {
+
+      if (!data.name) {
+        document.getElementById("result").innerHTML = "Product Not Found";
+        return;
+      }
+
+      document.getElementById("result").innerHTML = `
+        <h3>${data.name}</h3>
+        <p>${data.description}</p>
+        <p>Price: ₹${data.price}</p>
+        <p>Status: ${data.status}</p>
+        <p>Date: ${data.date}</p>
+        <img src="${data.image}">
+      `;
+    });
+}
+
+function startScanner() {
+  const html5QrCode = new Html5Qrcode("reader");
+  Html5Qrcode.getCameras().then(devices => {
+    if (devices.length) {
+      html5QrCode.start(
+        devices[0].id,
+        { fps: 10, qrbox: 250 },
+        barcode => {
+          document.getElementById("barcodeInput").value = barcode;
+          html5QrCode.stop();
+          trackProduct();
+        }
+      );
+    }
+  });
+}
+
+</script>
+
+</body>
+</html>
