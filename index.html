@@ -1,16 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Motospec Track</title>
+  <title>Motospec Product Tracking</title>
+
   <script src="https://unpkg.com/html5-qrcode"></script>
+
   <style>
-    body { background:#111; color:white; text-align:center; font-family:Arial; }
-    input, button { padding:10px; margin:10px; width:250px; border:none; border-radius:6px; }
-    button { background:#00ff99; font-weight:bold; }
-    #reader { width:300px; margin:auto; }
-    img { width:200px; margin-top:10px; }
+    body {
+      background: #111;
+      color: white;
+      text-align: center;
+      font-family: Arial;
+      padding: 20px;
+    }
+
+    input, button {
+      padding: 12px;
+      margin: 10px;
+      width: 260px;
+      border-radius: 6px;
+      border: none;
+      font-size: 16px;
+    }
+
+    button {
+      background: #00ff99;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #reader {
+      width: 300px;
+      margin: 20px auto;
+    }
+
+    #result {
+      margin-top: 20px;
+    }
+
+    img {
+      width: 200px;
+      margin-top: 15px;
+      border-radius: 8px;
+    }
   </style>
 </head>
+
 <body>
 
 <h2>Motospec Product Tracking</h2>
@@ -27,43 +62,56 @@
 
 const webhookURL = "https://hook.eu1.make.com/ec0zsxxpcfqjxb2wv23y3b674bso6red";
 
+// 🔎 Manual Search
 function trackProduct() {
   const barcode = document.getElementById("barcodeInput").value;
+
+  if (!barcode) {
+    alert("Please enter a barcode");
+    return;
+  }
 
   fetch(webhookURL + "?barcode=" + barcode)
     .then(res => res.json())
     .then(data => {
 
       if (!data.name) {
-        document.getElementById("result").innerHTML = "Product Not Found";
+        document.getElementById("result").innerHTML = "<h3>Product Not Found</h3>";
         return;
       }
 
       document.getElementById("result").innerHTML = `
         <h3>${data.name}</h3>
         <p>${data.description}</p>
-        <p>Price: ₹${data.price}</p>
-        <p>Status: ${data.status}</p>
-        <p>Date: ${data.date}</p>
+        <p><strong>Price:</strong> ₹${data.price}</p>
+        <p><strong>Status:</strong> ${data.status}</p>
+        <p><strong>Date:</strong> ${data.date}</p>
         <img src="${data.image}">
       `;
+    })
+    .catch(err => {
+      document.getElementById("result").innerHTML = "Error fetching product.";
+      console.log(err);
     });
 }
 
+// 📷 Back Camera Scanner
 function startScanner() {
   const html5QrCode = new Html5Qrcode("reader");
-  Html5Qrcode.getCameras().then(devices => {
-    if (devices.length) {
-      html5QrCode.start(
-        devices[0].id,
-        { fps: 10, qrbox: 250 },
-        barcode => {
-          document.getElementById("barcodeInput").value = barcode;
-          html5QrCode.stop();
-          trackProduct();
-        }
-      );
+
+  html5QrCode.start(
+    { facingMode: "environment" }, // 🔥 Forces rear camera
+    {
+      fps: 10,
+      qrbox: 250
+    },
+    barcode => {
+      document.getElementById("barcodeInput").value = barcode;
+      html5QrCode.stop();
+      trackProduct();
     }
+  ).catch(err => {
+    console.log("Camera error:", err);
   });
 }
 
