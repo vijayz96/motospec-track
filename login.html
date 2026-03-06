@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Motospec Seller Login</title>
+
+<style>
+body{
+font-family:Arial;
+background:#111;
+color:white;
+text-align:center;
+margin-top:100px;
+}
+
+input{
+padding:10px;
+margin:10px;
+width:250px;
+}
+
+button{
+padding:10px 20px;
+background:#00ff99;
+border:none;
+cursor:pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+<h2>Motospec Seller Login</h2>
+
+<input type="email" id="email" placeholder="Email"><br>
+<input type="password" id="password" placeholder="Password"><br>
+
+<button onclick="loginUser()">Login</button>
+
+<!-- Firebase -->
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+<script>
+
+const firebaseConfig = {
+apiKey: "AIzaSyCi0sodw0gRs0fNllMZbODIKpxxj4gwdos",
+authDomain: "motospec-system.firebaseapp.com",
+projectId: "motospec-system",
+storageBucket: "motospec-system.firebasestorage.app",
+messagingSenderId: "944522359083",
+appId: "1:944522359083:web:65b0706d8aadd4a63f556e"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+function loginUser(){
+
+var email=document.getElementById("email").value;
+var password=document.getElementById("password").value;
+
+firebase.auth().signInWithEmailAndPassword(email,password)
+.then(function(){
+
+alert("Login Success");
+window.location="dashboard.html";
+
+})
+.catch(function(error){
+
+alert(error.message);
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
