@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Motospec Dashboard</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#111;
+color:white;
+text-align:center;
+}
+
+.header{
+background:#000;
+padding:20px;
+}
+
+button{
+
+padding:12px 25px;
+margin:20px;
+border:none;
+border-radius:6px;
+background:#00ff99;
+font-weight:bold;
+cursor:pointer;
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+
+<h2>Motospec Seller Dashboard</h2>
+
+<button onclick="logout()">Logout</button>
+
+</div>
+
+<br>
+
+<h3>Welcome Seller</h3>
+
+<button onclick="goUpload()">Upload Product</button>
+
+<button onclick="viewProducts()">View Products</button>
+
+<script>
+
+if(localStorage.getItem("loggedIn")!="true"){
+window.location="index.html";
+}
+
+function logout(){
+
+localStorage.removeItem("loggedIn");
+
+window.location="index.html";
+
+}
+
+function goUpload(){
+
+window.location="upload.html";
+
+}
+
+function viewProducts(){
+
+alert("Product list page coming soon");
+
+}
+
+</script>
+
+</body>
+</html>
