@@ -1,84 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<title>Motospec Seller Login</title>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Motospec</title>
 
 <style>
+
 body{
-font-family: Arial;
-background:#0f0f0f;
+margin:0;
+font-family:Arial, sans-serif;
+background:#0f172a;
 color:white;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
+flex-direction:column;
 }
 
-.login-box{
-background:#1c1c1c;
-padding:40px;
-border-radius:10px;
-text-align:center;
+h1{
+font-size:40px;
+margin-bottom:10px;
 }
 
-input{
-padding:10px;
-margin:10px;
-width:220px;
-border:none;
-border-radius:5px;
+p{
+color:#cbd5f5;
 }
 
-button{
-padding:10px 20px;
-background:#00ff99;
-border:none;
-border-radius:5px;
-font-weight:bold;
-cursor:pointer;
-}
 </style>
+
+<script>
+
+// redirect to firebase login page
+
+window.onload = function(){
+
+window.location.href = "login.html";
+
+};
+
+</script>
+
 </head>
 
 <body>
 
-<div class="login-box">
+<h1>MOTOSPEC</h1>
 
-<h2>Motospec Seller</h2>
-
-<input type="text" id="username" placeholder="User ID"><br>
-
-<input type="password" id="password" placeholder="Password"><br>
-
-<button onclick="login()">Login</button>
-
-</div>
-
-<script>
-
-const user="seller";
-const pass="1234";
-
-function login(){
-
-let u=document.getElementById("username").value;
-let p=document.getElementById("password").value;
-
-if(u===user && p===pass){
-
-localStorage.setItem("loggedIn","true");
-
-window.location="dashboard.html";
-
-}else{
-
-alert("Wrong login");
-
-}
-
-}
-
-</script>
+<p>Redirecting to secure login...</p>
 
 </body>
+
 </html>
