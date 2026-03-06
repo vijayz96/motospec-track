@@ -1,118 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Motospec Product Tracking</title>
+<title>Motospec Seller Login</title>
 
-  <script src="https://unpkg.com/html5-qrcode"></script>
+<style>
+body{
+font-family: Arial;
+background:#0f0f0f;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
 
-  <style>
-    body {
-      background: #111;
-      color: white;
-      text-align: center;
-      font-family: Arial;
-      padding: 20px;
-    }
+.login-box{
+background:#1c1c1c;
+padding:40px;
+border-radius:10px;
+text-align:center;
+}
 
-    input, button {
-      padding: 12px;
-      margin: 10px;
-      width: 260px;
-      border-radius: 6px;
-      border: none;
-      font-size: 16px;
-    }
+input{
+padding:10px;
+margin:10px;
+width:220px;
+border:none;
+border-radius:5px;
+}
 
-    button {
-      background: #00ff99;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    #reader {
-      width: 300px;
-      margin: 20px auto;
-    }
-
-    #result {
-      margin-top: 20px;
-    }
-
-    img {
-      width: 200px;
-      margin-top: 15px;
-      border-radius: 8px;
-    }
-  </style>
+button{
+padding:10px 20px;
+background:#00ff99;
+border:none;
+border-radius:5px;
+font-weight:bold;
+cursor:pointer;
+}
+</style>
 </head>
 
 <body>
 
-<h2>Motospec Product Tracking</h2>
+<div class="login-box">
 
-<input type="text" id="barcodeInput" placeholder="Enter Barcode">
-<br>
-<button onclick="trackProduct()">Search</button>
-<button onclick="startScanner()">Scan Barcode</button>
+<h2>Motospec Seller</h2>
 
-<div id="reader"></div>
-<div id="result"></div>
+<input type="text" id="username" placeholder="User ID"><br>
+
+<input type="password" id="password" placeholder="Password"><br>
+
+<button onclick="login()">Login</button>
+
+</div>
 
 <script>
 
-const webhookURL = "https://hook.eu1.make.com/ec0zsxxpcfqjxb2wv23y3b674bso6red";
+const user="seller";
+const pass="1234";
 
-// 🔎 Manual Search
-function trackProduct() {
-  const barcode = document.getElementById("barcodeInput").value;
+function login(){
 
-  if (!barcode) {
-    alert("Please enter a barcode");
-    return;
-  }
+let u=document.getElementById("username").value;
+let p=document.getElementById("password").value;
 
-  fetch(webhookURL + "?barcode=" + barcode)
-    .then(res => res.json())
-    .then(data => {
+if(u===user && p===pass){
 
-      if (!data.name) {
-        document.getElementById("result").innerHTML = "<h3>Product Not Found</h3>";
-        return;
-      }
+localStorage.setItem("loggedIn","true");
 
-      document.getElementById("result").innerHTML = `
-        <h3>${data.name}</h3>
-        <p>${data.description}</p>
-        <p><strong>Price:</strong> ₹${data.price}</p>
-        <p><strong>Status:</strong> ${data.status}</p>
-        <p><strong>Date:</strong> ${data.date}</p>
-        <img src="${data.image}">
-      `;
-    })
-    .catch(err => {
-      document.getElementById("result").innerHTML = "Error fetching product.";
-      console.log(err);
-    });
+window.location="dashboard.html";
+
+}else{
+
+alert("Wrong login");
+
 }
 
-// 📷 Back Camera Scanner
-function startScanner() {
-  const html5QrCode = new Html5Qrcode("reader");
-
-  html5QrCode.start(
-    { facingMode: "environment" }, // 🔥 Forces rear camera
-    {
-      fps: 10,
-      qrbox: 250
-    },
-    barcode => {
-      document.getElementById("barcodeInput").value = barcode;
-      html5QrCode.stop();
-      trackProduct();
-    }
-  ).catch(err => {
-    console.log("Camera error:", err);
-  });
 }
 
 </script>
